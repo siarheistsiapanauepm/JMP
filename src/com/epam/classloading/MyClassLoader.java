@@ -1,5 +1,7 @@
 package com.epam.classloading;
 
+import org.apache.log4j.Logger;
+
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -8,6 +10,8 @@ import java.util.Arrays;
 import java.util.jar.JarFile;
 
 public class MyClassLoader extends ClassLoader{
+
+	private static final Logger LOGGER = Logger.getLogger(MyClassLoader.class);
 
 	private static final String PATH_TO_JAR = "C:/lib.jar";
 	private static final String[] loadableClasses = {"com.epam.classloading.Simple"}; //list names of classes that should be loaded by this classloader (package.Classname)
@@ -18,6 +22,7 @@ public class MyClassLoader extends ClassLoader{
 
 	public Class loadClass(String name) throws ClassNotFoundException {
 		if (! Arrays.asList(loadableClasses).contains(name))   {
+			LOGGER.info("!!! parent classloader is using !!!");
 			return super.loadClass(name);
 		}
 
@@ -38,9 +43,11 @@ public class MyClassLoader extends ClassLoader{
 			return defineClass(name, classData, 0, classData.length);
 
 		} catch (MalformedURLException e) {
-			e.printStackTrace();
+			LOGGER.error(e);
+//			e.printStackTrace();
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.error(e);
+//			e.printStackTrace();
 		}
 
 		return null;
