@@ -3,9 +3,6 @@ package  com.epam.multithreading;
 import com.epam.multithreading.model.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.InstanceCreator;
-import com.sun.org.apache.regexp.internal.recompile;
-import flexjson.JSONSerializer;
 
 import java.io.*;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -31,23 +28,8 @@ public class Multithreader {
 		}
 	}
 
-	public static void save2(Object obj) throws IOException {
-		JSONSerializer serializer = new JSONSerializer();
-		LOCK.writeLock().lock();
-		LOCK.readLock().lock();
-		try {
-			BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(FILENAME)));
-			out.write(serializer.deepSerialize(obj));
-			out.close();
-		} finally {
-			LOCK.writeLock().unlock();
-			LOCK.readLock().unlock();
-		}
-	}
-
 	public static Bank load() throws IOException {
 		GsonBuilder gsonBuilder = new GsonBuilder().enableComplexMapKeySerialization();
-//		.registerTypeAdapter(ICurrency.class, new InstanceCreator<ICurrency.class>())
 		Gson gson = gsonBuilder.create();
 		Bank b;
 		LOCK.readLock().lock();
