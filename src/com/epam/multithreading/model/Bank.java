@@ -1,4 +1,4 @@
-package  com.epam.multithreading.model;
+package com.epam.multithreading.model;
 
 import java.util.*;
 
@@ -7,11 +7,11 @@ public class Bank {
     private Map<String, Currency> currencies = new HashMap<String, Currency>();
     private List<Account> accounts = new ArrayList<>();
 
-    public Currency addCurrency(Currency Currency) {
-        String currencyCode = Currency.getCode();
+    public Currency addCurrency(Currency currency) {
+        String currencyCode = currency.getCode();
         if (currencies.get(currencyCode) == null ) {
-            currencies.put(currencyCode, Currency);
-            return Currency;
+            currencies.put(currencyCode, currency);
+            return currency;
         } else {
             return null;
         }

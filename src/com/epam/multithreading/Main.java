@@ -1,16 +1,11 @@
-package  com.epam.multithreading;
+package com.epam.multithreading;
 
-import com.epam.multithreading.Multithreader;
 import com.epam.multithreading.model.*;
-
-import java.io.*;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.epam.multithreading.model.exception.AccountOperationException;
+import com.epam.multithreading.model.exception.ExchangeOperationException;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.Random;
 
 public class Main {
 
@@ -19,7 +14,7 @@ public class Main {
 	    Application.start();
     }
 
-    private static void test() throws IOException {
+    private static void test() throws IOException, AccountOperationException, ExchangeOperationException {
 	    Bank bank = new Bank();
 
 	    Currency byr = new Currency("BYR", "Belarusian ruble", 415_181);
