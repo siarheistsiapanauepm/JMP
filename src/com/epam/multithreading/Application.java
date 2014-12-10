@@ -1,7 +1,9 @@
-package  com.epam.multithreading;
+package com.epam.multithreading;
 
 import com.epam.multithreading.model.Account;
 import com.epam.multithreading.model.Bank;
+import com.epam.multithreading.model.exception.AccountOperationException;
+import com.epam.multithreading.model.exception.ExchangeOperationException;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -29,6 +31,10 @@ public class Application implements Runnable{
 			} catch (IOException e) {
 				e.printStackTrace();
 				System.out.println(e);
+			} catch (AccountOperationException e) {
+				e.printStackTrace();
+			} catch (ExchangeOperationException e) {
+				e.printStackTrace();
 			}
 		}
 	}

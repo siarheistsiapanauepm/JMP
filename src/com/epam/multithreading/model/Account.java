@@ -1,4 +1,7 @@
-package  com.epam.multithreading.model;
+package com.epam.multithreading.model;
+
+import com.epam.multithreading.model.exception.AccountOperationException;
+import com.epam.multithreading.model.exception.ExchangeOperationException;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -13,11 +16,21 @@ public class Account {
         currencies = new HashMap<>();
     }
 
+    public BigDecimal getCurrencyBalance(String code) {
+        return currencies.get(code);
+    }
+
     public String getPersonId() {
         return owner.getGovermentalId();
     }
 
-    public Account refill(Currency currency, BigDecimal amount){
+    public Account refill(Currency currency, BigDecimal amount) throws AccountOperationException {
+        if (currency == null) {
+            throw new AccountOperationException(AccountOperationException.CURRENCY_NOT_SPECIFIED);
+        }
+        if (amount == null) {
+            throw new AccountOperationException(AccountOperationException.AMOUNT_NOT_SPECIFIED);
+        }
         final String code = currency.getCode();
         final BigDecimal curValue = currencies.get(code);
         BigDecimal newValue = amount;
@@ -28,14 +41,24 @@ public class Account {
         return this;
     }
 
-    public void exchange(Currency src, BigDecimal amount, Currency dest) {
+    public void exchange(Currency src, BigDecimal amount, Currency dest) throws ExchangeOperationException, AccountOperationException {
+        if (src == null) {
+            throw new ExchangeOperationException(ExchangeOperationException.SOURCE_CURRENCY_DOES_NOT_EXIST_IN_THIS_ACCOUNT);
+        }
         BigDecimal curSrcVal = currencies.get(src.getCode());
         if (curSrcVal != null) {
 
 	        if (curSrcVal.compareTo(amount) >= 0) { //check, it is enough money in this currency
 		        currencies.put(src.getCode(), curSrcVal.subtract(amount));
-		        refill(dest, src.convert(amount, dest));
-	        }
+                if (dest == null) {
+                    throw new ExchangeOperationException(ExchangeOperationException.TARGET_CURRENCY_NOT_SPECIFIED);
+                }
+                refill(dest, src.convert(amount, dest));
+            } else {
+                throw new ExchangeOperationException(ExchangeOperationException.NOT_ENOUGH_MONEY_TO_EXCHANGE);
+            }
+        } else {
+            throw new ExchangeOperationException(ExchangeOperationException.SOURCE_CURRENCY_DOES_NOT_EXIST_IN_THIS_ACCOUNT);
         }
     }
 
